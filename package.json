@@ -1,0 +1,19 @@
+{
+  "name": "nova",
+  "version": "1.0.0",
+  "description": "Un bot automatizado especializado en Whatsapp orientado a la Universidad Tecnologica del Putumayo",
+  "main": "main.js",
+  "scripts": {
+    "test": "start nova"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/D4N-1/NOVA.git"
+  },
+  "author": "Danny Solarte / David Zambrano / Johan Arteaga / Vanessa Enriquez",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/D4N-1/NOVA/issues"
+  },
+  "homepage": "https://github.com/D4N-1/NOVA#readme"
+}
