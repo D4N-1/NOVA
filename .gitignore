@@ -1,2 +1,3 @@
 # Ignorar dependencias
 node_modules/
+auth/
