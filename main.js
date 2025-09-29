@@ -12,6 +12,7 @@ import {
 
 import pino from "pino"
 import codigo from "qrcode"
+import fs from "fs"
 
 let ruta = await useMultiFileAuthState("./auth") // \ = Win   |  / = JS
 
@@ -91,6 +92,11 @@ nova.ev.on("messages.upsert", async(data) => { // update + insert
 
     if (contenido == "comandos"){
         nova.sendMessage(canal, {text :"¡Aqui esta mi lista de comandos:!"})
+    }
+
+    if(contenido == "si"){
+        let imagen = fs.readFileSync("./imagenes/logo.png")
+        nova.sendMessage(canal,{image:imagen, caption:""})
     }
 
 })
