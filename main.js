@@ -81,7 +81,17 @@ nova.ev.on("messages.upsert", async(data) => { // update + insert
     console.log(`${autorNombre} - ⏳${hora}`);
 
 
+    if (contenido == "hola"){
+        nova.sendMessage(canal, { text: "¡Hola!, soy Nova, ¿En que puedo ayudarte hoy?"});
+    }
 
+    if (contenido == "ayuda"){
+        nova.sendMessage(canal, {text: "¿En que puedo ayudarte hoy?"});
+    }
+
+    if (contenido == "comandos"){
+        nova.sendMessage(canal, {text :"¡Aqui esta mi lista de comandos:!"})
+    }
 
 })
 
