@@ -13,14 +13,16 @@ import {
 import pino from "pino"
 import codigo from "qrcode"
 
-let ruta = await useMultiFileAuthState("./auth")
+let ruta = await useMultiFileAuthState("./auth") // \ = Win   |  / = JS
 
-console.log(ruta)
 
-let nova = makeWASocket({
+let nova = makeWASocket({ // Hacer un socket de WA
     auth: ruta.state,
-    logger: pino({level: "silent"})
+    logger: pino({level: "silent"}) // Logger = log = console.log()
+    // silent / crtical / error / info / debug / trace
 })
+
+
 
 nova.ev.on("creds.update", ruta.saveCreds)
 
@@ -37,7 +39,7 @@ nova.ev.on("connection.update", async(data) => {
 })
 
 
-nova.ev.on("messages.upsert", async(data) => {
+nova.ev.on("messages.upsert", async(data) => { // update + insert
 
     let mensaje = data?.messages?.[0]?.message?.videoMessage?.caption || data?.messages?.[0]?.message?.imageMessage?.caption ||
     data?.messages?.[0]?.message?.extendedTextMessage?.text || data?.messages?.[0]?.message?.conversation || ""
@@ -79,31 +81,6 @@ nova.ev.on("messages.upsert", async(data) => {
     console.log(`${autorNombre} - ⏳${hora}`);
 
 
-
-    if (mensaje == "4") nova.sendMessage(autor, { text: "En tu cola mi aparato"}) // Envia mensaje siple
-    
-    
-
-    if (mensaje == "13") {
-        let respuestas = [
-            "Aquí tiene pa que me la bese",
-            "entre más me la beses más me crece",
-            "busca un cura pa que me la rece",
-            "y trae un martillo pa que me la endereces",
-            "por el chiquito se te aparece toas las veces",
-            "cuando te estreses aquí te tengo éste pa que te desestreses",
-            "con este tallo el jopo se te esflorece",
-            "se cumple el ciclo hasta que anochece",
-            "de tanto entablar la raja del jopo se te desaparece"
-        ]
-
-        // Math.floor(Math.random() * 100) + 1
-        nova.sendMessage(autor, { text: respuestas[ Math.floor(Math.random() * respuestas.length) ]})
-    }
-
-    if(mensaje== "5" ){
-        nova.sendMessage(autor, {text:"por el 4 letras te la inco"})
-    }
 
 
 })
