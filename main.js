@@ -94,10 +94,16 @@ nova.ev.on("messages.upsert", async(data) => { // update + insert
         nova.sendMessage(canal, {text :"¡Aqui esta mi lista de comandos:!"})
     }
 
-    if(contenido == "si"){
+    if(contenido == "necesito el logo de la uni putumayo"){
         let imagen = fs.readFileSync("./imagenes/logo.png")
         nova.sendMessage(canal,{image:imagen, caption:""})
     }
+
+      if(contenido == "cancha sintetica"){
+        let imagen = fs.readFileSync("./imagenes/cancha.png")
+        nova.sendMessage(canal,{image:imagen, caption:""})
+    }
+
 
 })
 
