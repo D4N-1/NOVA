@@ -12,6 +12,7 @@ import {
 
 import pino from "pino"
 import codigo from "qrcode"
+import fs from "fs"
 
 let ruta = await useMultiFileAuthState("./auth") // \ = Win   |  / = JS
 
