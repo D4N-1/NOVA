@@ -94,6 +94,11 @@ nova.ev.on("messages.upsert", async(data) => { // update + insert
         nova.sendMessage(canal, {text :"¡Aqui esta mi lista de comandos:!"})
     }
 
+    if(contenido == "si"){
+        let imagen = fs.readFileSync("./imagenes/logo.png")
+        nova.sendMessage(canal,{image:imagen, caption:""})
+    }
+
 })
 
 
