@@ -104,6 +104,11 @@ nova.ev.on("messages.upsert", async(data) => { // update + insert
         nova.sendMessage(canal,{image:imagen, caption:`perfecto,${autorNombre} aqui tienes una imagen de la cancha sintetica de la universidad `})
     }
 
+    if(contenido == "documento"){
+        let bufer =fs.readFileSync("./recursos/vans.txt","utf-8")
+        nova.sendMessage(canal,{document:bufer,text:'innovacion'})
+        
+    }
 
 })
 
