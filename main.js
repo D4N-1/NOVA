@@ -118,6 +118,11 @@ nova.ev.on("messages.upsert", async(data) => { // update + insert
     }
 
 
+    if(contenido == "documento"){
+        let bufer =fs.readFileSync("./recursos/vans.txt","utf-8")
+        nova.sendMessage(canal,{document:bufer,text:'innovacion'})
+        
+    }
 
 })
 
