@@ -8,11 +8,12 @@ import {
   downloadMediaMessage, // Descargar media del mensaje
   getContentType, // Saber que TIPO de mensaje es
   downloadContentFromMessage // Descargar media del mensaje
-} from "baileys";
+} from "@itsukichan/baileys";
 
 import pino from "pino"
 import codigo from "qrcode"
 import fs from "fs"
+import path from "path"
 
 let ruta = await useMultiFileAuthState("./auth") // \ = Win   |  / = JS
 
@@ -42,13 +43,15 @@ nova.ev.on("connection.update", async(data) => {
 
 nova.ev.on("messages.upsert", async(data) => { // update + insert
 
-    let mensaje = data?.messages?.[0]?.message?.videoMessage?.caption || data?.messages?.[0]?.message?.imageMessage?.caption ||
-    data?.messages?.[0]?.message?.extendedTextMessage?.text || data?.messages?.[0]?.message?.conversation || ""
+    let message = data?.messages[0]
 
-    let autorNombre = data?.messages?.[0]?.pushName
-    let autor = data?.messages?.[0]?.key.participant || data?.messages?.[0]?.key.participantAlt
+    let mensaje = message?.message?.videoMessage?.caption || message?.message?.imageMessage?.caption ||
+    message?.message?.extendedTextMessage?.text || message?.message?.conversation || ""
 
-    let hora = new Date(data?.messages?.[0]?.messageTimestamp * 1000).toLocaleString()
+    let autorNombre = message?.pushName
+    let autor = message?.key.participant || message?.key.participantAlt
+
+    let hora = new Date(message?.messageTimestamp * 1000).toLocaleString()
 
     let tipo = getContentType(data.messages?.[0]?.message)
 
@@ -77,32 +80,43 @@ nova.ev.on("messages.upsert", async(data) => { // update + insert
             break;
     }
 
+    if (autorNombre == undefined || autor == undefined) return
+
     console.info(`\n─────────────── [ INFO ] ───────────────`);
     console.log(`[${tipo}] 🆔  ${canal} / ${autor} :: ${mensaje}`); 
     console.log(`${autorNombre} - ⏳${hora}`);
 
 
-    if (contenido == "hola"){
-        nova.sendMessage(canal, { text: "¡Hola!, soy Nova, ¿En que puedo ayudarte hoy?"});
+    switch (mensaje){
+
+        case "Hola":
+            await nova.sendMessage(canal, { text: `Hola, como estas ${autorNombre}?`}) // Enviar texto
+            break;
+        
+        case "Ayuda":
+            await nova.sendMessage(canal, { text: `¿En que te puedo ayudar hoy ${autorNombre}?`}, {quoted: message}) // Responder
+            break;
+        
+        case "Mencion":
+            await nova.sendMessage(canal, { text: `@${autor.split("@")[0]}`, mentions: [autor]}) // Mencion
+            break;
+        
+        case "Cancha":
+
+            await nova.sendMessage(canal, { caption: "Aqui tienes la imagen de la cancha", image: fs.readFileSync("./imagenes/cancha uni.jpg")}, { quoted: message})
+            break;
+
+        case "Video":
+
+            await nova.sendMessage(canal, { caption: "Aqui tienes tu video", video: fs.readFileSync("./video/VR.mp4")})
+            break;
+
+        case "Audio":
+            console.log("Si se recibio la peticion de audio")
+            await nova.sendMessage(canal, { audio: {url: path.resolve("audio", "zi.mp3")} })
+            break;
     }
 
-    if (contenido == "ayuda"){
-        nova.sendMessage(canal, {text: "¿En que puedo ayudarte hoy?"});
-    }
-
-    if (contenido == "comandos"){
-        nova.sendMessage(canal, {text :"¡Aqui esta mi lista de comandos:!"})
-    }
-
-    if(contenido == "necesito el logo de la uni putumayo"){
-        let imagen = fs.readFileSync("./imagenes/logo.png")
-        nova.sendMessage(canal,{image:imagen, caption:`claro, ${autorNombre} aqui tienes el logo de la uni putumayo`})
-    }
-
-      if(contenido == "cancha sintetica"){
-        let imagen = fs.readFileSync("./imagenes/cancha.png")
-        nova.sendMessage(canal,{image:imagen, caption:`perfecto,${autorNombre} aqui tienes una imagen de la cancha sintetica de la universidad `})
-    }
 
 
 })
