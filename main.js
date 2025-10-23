@@ -18,6 +18,7 @@ import path from "path"
 let ruta = await useMultiFileAuthState("./auth") // \ = Win   |  / = JS
 
 
+
 let nova = makeWASocket({ // Hacer un socket de WA
     auth: ruta.state,
     logger: pino({level: "silent"}) // Logger = log = console.log()
