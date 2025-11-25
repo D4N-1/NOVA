@@ -8,40 +8,45 @@ import {
   downloadMediaMessage, // Descargar media del mensaje
   getContentType, // Saber que TIPO de mensaje es
   downloadContentFromMessage // Descargar media del mensaje
-} from "@itsukichan/baileys";
+} from "dcodeindra-baileyspro";
 
 import pino from "pino"
 import codigo from "qrcode"
 import fs from "fs"
 import path from "path"
 
-let ruta = await useMultiFileAuthState("./auth") // \ = Win   |  / = JS
 
+export const wait = (ms) => new Promise((res) => setTimeout(res, ms));
 
+let ruta = await useMultiFileAuthState("./auth/nova") // \ = Win   |  / = JS
 
 let nova = makeWASocket({ // Hacer un socket de WA
-    auth: ruta.state,
-    logger: pino({level: "silent"}) // Logger = log = console.log()
-    // silent / crtical / error / info / debug / trace
-})
-
+        browser: ["Nova", "Chrome", "10.0"],
+        auth: ruta.state,
+        logger: pino({level: "silent"}), // Logger = log = console.log()
+        // silent / crtical / error / info / debug / trace
+    })
 
 
 nova.ev.on("creds.update", ruta.saveCreds)
 
 
 nova.ev.on("connection.update", async(data) => {
-    console.log(data)
+    console.log("─────────────── [ CONEXION ] ───────────────");
+    console.log(JSON.stringify(data,null,2))
 
+    
     // Si QR es undefined, no seguir, de lo contrario, seguir
     if (data.qr == undefined) return
 
-    console.log("❇️ SI HAY QR")
+
+
     console.log(await codigo.toString(data.qr, {type:"terminal", small: true}))
     
 })
 
 
+/*
 nova.ev.on("messages.upsert", async(data) => { // update + insert
 
     let message = data?.messages[0]
@@ -126,5 +131,4 @@ nova.ev.on("messages.upsert", async(data) => { // update + insert
     }
 
 })
-
-
+*/
